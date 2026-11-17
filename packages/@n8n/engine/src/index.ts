@@ -176,6 +176,7 @@ export type {
 	WorkflowDocument,
 } from './execution';
 
+export { retentionPolicyFromHours } from './retention';
 export type { ExecutionRetentionPolicy } from './retention';
 
 export { createDataSource, WorkflowExecution, WorkflowStepExecution } from './database';
