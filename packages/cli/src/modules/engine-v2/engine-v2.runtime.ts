@@ -138,6 +138,13 @@ export class EngineV2Runtime {
 		const stopping = new AbortController();
 		this.stopping = stopping;
 
+		const retention = retentionPolicyFromHours({
+			enabled: this.executionsConfig.pruneData,
+			maxAgeHours: this.executionsConfig.pruneDataMaxAge,
+		});
+		if (retention) this.logger.info('Execution retention is on', { maxAgeMs: retention.maxAgeMs });
+		else this.logger.info('Execution retention is off');
+
 		this.engine = createEngineRuntime({
 			dataSource: this.dataSource,
 			// TODO(CAT-2909): placeholder policy — every execution is admitted and no
@@ -148,10 +155,7 @@ export class EngineV2Runtime {
 			responseSender,
 			resumeSecret: this.engineConfig.resumeSecret,
 			queues,
-			retention: retentionPolicyFromHours({
-				enabled: this.executionsConfig.pruneData,
-				maxAgeHours: this.executionsConfig.pruneDataMaxAge,
-			}),
+			retention,
 			externalDependencies: ({ executionStore, stepStore }) => ({
 				lifecycleEventCallback: lifecycleEventSender
 					? async (events, signal) => await lifecycleEventSender.send(events, signal)
