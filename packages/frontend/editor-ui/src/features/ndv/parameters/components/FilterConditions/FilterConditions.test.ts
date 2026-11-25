@@ -310,6 +310,35 @@ describe('FilterConditions.vue', () => {
 		expect(conditions[0].querySelector('[data-test-id="filter-remove-condition"]')).toBeNull();
 	});
 
+	it('names the value in the edit window by its role, not by its side', async () => {
+		const { getByTestId, findByRole } = renderComponent({
+			...DEFAULT_SETUP,
+			props: {
+				...DEFAULT_SETUP.props,
+				value: {
+					options: DEFAULT_OPTIONS,
+					conditions: [
+						{
+							id: '1',
+							leftValue: '={{ $json.output }}',
+							rightValue: 'yes',
+							operator: getFilterOperator('string:equals'),
+						},
+					],
+				} as Partial<FilterValue> as FilterValue,
+			},
+		});
+
+		const right = getByTestId('filter-condition-right');
+		const opener = right.querySelector('.textarea-modal-opener');
+		if (!opener) throw new Error('Edit window opener not found');
+		await userEvent.click(opener);
+
+		const dialog = await findByRole('dialog');
+		expect(dialog).toHaveTextContent('Edit Value to compare');
+		expect(dialog).not.toHaveTextContent('Edit Right');
+	});
+
 	it('can edit conditions', async () => {
 		const { getByTestId, emitted } = renderComponent({
 			...DEFAULT_SETUP,

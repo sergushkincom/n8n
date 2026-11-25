@@ -7931,6 +7931,8 @@
 	"filter.maxConditions": "Maximum conditions reached",
 	"filter.condition.resolvedTrue": "This condition is true for the first input item",
 	"filter.condition.resolvedFalse": "This condition is false for the first input item",
+	"filter.condition.labelLeft": "Value",
+	"filter.condition.labelRight": "Value to compare",
 	"filter.condition.placeholderLeft": "value1",
 	"filter.condition.placeholderRight": "value2",
 	"assignment.dragFields": "Drag input fields here",
